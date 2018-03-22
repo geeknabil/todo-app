@@ -30,7 +30,7 @@ function newTodo() {
   // select todoElement's checkbox from the DOM
   const checkbox = todoElement.lastElementChild
 
-  // if checkbox is checked decrement unchecked todos count by one otherwise do the opposite
+  // if checkbox checked decrement unchecked todos count by one otherwise do the opposite
   checkbox.addEventListener("click", function(event) {
     if (event.target.checked) {
       countCheckedTodo(uncheckedCountSpan)
@@ -47,12 +47,18 @@ function makeTodo(todoText) {
   // create li
   const li = document.createElement("li")
 
+  addStyle(classNames.TODO_ITEM, li)
+
   // create span
   const span = document.createElement("span")
+
+  addStyle(classNames.TODO_TEXT, span)
 
   // create input and set it's type to checkbox
   const checkbox = document.createElement("input");
   checkbox.setAttribute("type", "checkbox")
+
+  addStyle(classNames.TODO_CHECKBOX, checkbox)
 
   // add text to span
   span.textContent = todoText
@@ -93,13 +99,6 @@ function count(element) {
   element.innerHTML = count.toString()
 }
 
-// // check if certain element is checked or not
-// function isChecked(element) {
-//   element.addEventListener("click", function(event) {
-//       return event.target.checked
-//   })
-
-// }
 
 // decrease unchecked todos count if certain element is checked
 function countCheckedTodo(element) {
@@ -107,3 +106,18 @@ function countCheckedTodo(element) {
   count--
   element.innerHTML = count.toString()
 }
+
+// add css to html elements
+function addStyle(style, element) {
+  element.setAttribute("class", style)
+}
+
+
+/*********
+// check if certain element is checked or not
+function isChecked(element) {
+  element.addEventListener("click", function(event) {
+      return event.target.checked
+  })
+}
+**********/
