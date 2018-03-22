@@ -9,54 +9,101 @@ const list = document.getElementById('todo-list')
 const itemCountSpan = document.getElementById('item-count')
 const uncheckedCountSpan = document.getElementById('unchecked-count')
 
+
+
 function newTodo() {
-  // create new div and insert it after newTodo button
-  list.previousElementSibling.insertAdjacentHTML('afterEnd', "<div id='add-todo'></div>");
+  // get todoText from user
+  const todoText = prompt("Add a todo!")
 
-  // create text field and append it to our new div
-  let div = document.getElementById('add-todo');
-  let inputField = document.createElement("input");
-  div.appendChild(inputField)
+  // create a todoElement with inputted todoText
+  todoElement = makeTodo(todoText)
 
-  // creat addButton and append it also to our new div
-  let addButton = document.createElement("button");
-  addButton.textContent = "Add Todo";
-  div.appendChild(addButton);
+  // append todoElement to DOM list element
+  render(todoElement, list)
 
-  // listen and respond to Added Todos
-  addButton.addEventListener('click', function(event) {
-    // get ul element
-    let ul = document.getElementById('todo-list');
+  // count newtodo
+  countNewTodo(itemCountSpan)
 
-    // create li element and append it to our ul
-    let li = document.createElement('li')
-    li.setAttribute('class', classNames.TODO_ITEM);
-    ul.appendChild(li);
+  // count unchecked todos
+  countUncheckedTodo(uncheckedCountSpan)
 
-    // create span element and append it to our li
-    let span = document.createElement('span');
-    span.setAttribute('class', classNames.TODO_TEXT);
-    span.textContent = inputField.value;
-    li.appendChild(span);
+  // select todoElement's checkbox from the DOM
+  const checkbox = todoElement.lastElementChild
 
-    // create checkBox and append it also to our li
-    let checkBox = document.createElement('input');
-    checkBox.setAttribute('type', 'checkbox');
-    checkBox.setAttribute('class', classNames.TODO_CHECKBOX);
-    li.appendChild(checkBox);
-
-    // if  increment item count and unchecked count by 1
-    itemCountSpan.textContent = Number(itemCountSpan.textContent) + 1;
-    uncheckedCountSpan.textContent = Number(uncheckedCountSpan.textContent) + 1;
-
-    // listen and respond to checkbox behaviour
-    checkBox.addEventListener('change', function(event) {
-      if (event.target.checked)
-        // if checkbox is checked increment unchecked count by 1 else decrement it by 1
-        uncheckedCountSpan.textContent = Number(uncheckedCountSpan.textContent) - 1;
-      else
-        uncheckedCountSpan.textContent = Number(uncheckedCountSpan.textContent) + 1;
-    })
+  // if checkbox is checked decrement unchecked todos count by one otherwise do the opposite
+  checkbox.addEventListener("click", function(event) {
+    if (event.target.checked) {
+      countCheckedTodo(uncheckedCountSpan)
+    } else {
+      countUncheckedTodo(uncheckedCountSpan)
+    }
   })
 
+}
+
+
+// create todoElements
+function makeTodo(todoText) {
+  // create li
+  const li = document.createElement("li")
+
+  // create span
+  const span = document.createElement("span")
+
+  // create input and set it's type to checkbox
+  const checkbox = document.createElement("input");
+  checkbox.setAttribute("type", "checkbox")
+
+  // add text to span
+  span.textContent = todoText
+
+  // append span to li
+  render(span, li)
+
+  // appent checkbox to li
+  render(checkbox, li)
+
+  // return todoElement
+  return li
+
+}
+
+
+// append elements to the DOM
+function render(element, destination) {
+  destination.appendChild(element)
+}
+
+
+// count total todos
+function countNewTodo(element) {
+  count(element)
+}
+
+
+// increase unchecked todos count everytime new tod0 added
+function countUncheckedTodo(element) {
+  count(element)
+}
+
+// factor out common code for countNewTodo and countUncheckedTodo functions
+function count(element) {
+  let count = Number(element.innerHTML)
+  count++
+  element.innerHTML = count.toString()
+}
+
+// // check if certain element is checked or not
+// function isChecked(element) {
+//   element.addEventListener("click", function(event) {
+//       return event.target.checked
+//   })
+
+// }
+
+// decrease unchecked todos count if certain element is checked
+function countCheckedTodo(element) {
+  let count = Number(element.innerHTML)
+  count--
+  element.innerHTML = count.toString()
 }
